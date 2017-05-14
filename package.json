@@ -1,0 +1,29 @@
+{
+  "name": "ts-reference-for-automated-testing",
+  "version": "1.0.0",
+  "description": "Reference game for implementing a unit-testable game in Typescript with Phaser.",
+  "scripts": {
+    "build": "tsc -p ./src/tsconfig.json",
+    "pretest": "tsc -p ./test/tsconfig.json",
+    "test": "mocha ./temp/**/*.js",
+    "posttest": "rimraf ./src/**/*.js ./temp/**/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NickH-nz/ts-reference-for-automated-testing.git"
+  },
+  "author": "Nick Heath",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/NickH-nz/ts-reference-for-automated-testing/issues"
+  },
+  "homepage": "https://github.com/NickH-nz/ts-reference-for-automated-testing#readme",
+  "devDependencies": {
+    "@types/mocha": "^2.2.41",
+    "ceylon": "^0.9.1",
+    "mocha": "^3.3.0",
+    "phaser-ce": "^2.7.9",
+    "rimraf": "^2.6.1",
+    "typescript": "^2.3.2"
+  }
+}

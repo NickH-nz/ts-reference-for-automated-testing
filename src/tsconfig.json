@@ -1,0 +1,6 @@
+{
+    "compilerOptions": {
+        "module": "amd",
+        "outFile": "../dist/index.js"
+    }
+}
