@@ -6,7 +6,8 @@
     "build": "tsc -p ./src/tsconfig.json",
     "pretest": "tsc -p ./test/tsconfig.json",
     "test": "mocha ./temp/**/*.js",
-    "posttest": "rimraf ./src/**/*.js ./temp/**/*.js"
+    "posttest": "rimraf ./src/**/*.js ./temp/**/*.js",
+    "lint": "tslint -c ./tslint.json -p ./src/tsconfig.json && tslint -c ./tslint.json -p ./test/tsconfig.json"
   },
   "repository": {
     "type": "git",
@@ -24,6 +25,7 @@
     "mocha": "^3.3.0",
     "phaser-ce": "^2.7.9",
     "rimraf": "^2.6.1",
+    "tslint": "^5.2.0",
     "typescript": "^2.3.2"
   }
 }

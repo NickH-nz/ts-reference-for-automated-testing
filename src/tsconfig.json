@@ -2,5 +2,9 @@
     "compilerOptions": {
         "module": "amd",
         "outFile": "../dist/index.js"
-    }
+    },
+    "include": [
+        "../node_modules/phaser-ce/typescript/phaser.d.ts",
+        "./**/*.ts"
+    ]
 }
