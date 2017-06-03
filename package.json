@@ -7,7 +7,8 @@
     "pretest": "tsc -p ./test/tsconfig.json",
     "test": "mocha ./temp/**/*.js",
     "posttest": "rimraf ./src/**/*.js ./temp/**/*.js",
-    "lint": "tslint -c ./tslint.json -p ./src/tsconfig.json && tslint -c ./tslint.json -p ./test/tsconfig.json"
+    "lint": "tslint -c ./tslint.json -p ./src/tsconfig.json && tslint -c ./tslint.json -p ./test/tsconfig.json",
+    "dev": "npm run lint && npm run test && npm run build"
   },
   "repository": {
     "type": "git",
