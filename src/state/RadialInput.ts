@@ -1,4 +1,3 @@
-import {RpsMove} from "../MaxesGame";
 import {InputOption} from "./InputOption";
 
 export class RadialInput<T> extends Phaser.Group {
