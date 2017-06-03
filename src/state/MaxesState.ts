@@ -14,6 +14,8 @@ export class MaxesState extends Phaser.State {
     public preload(): void {
         this.load.spritesheet("rps", "assets/rps.png", 289, 275);
         this.load.image("rps-select", "assets/rps-combined.png");
+        this.load.spritesheet("directions", "assets/directions.png", 275, 275);
+        this.load.image("direction-select", "assets/directions-combined.png");
     }
 
     public init(): void {
@@ -49,6 +51,35 @@ export class MaxesState extends Phaser.State {
             }
             rps.visible = false;
             rpsSelector.visible = true;
+            directionSelector.visible = true;
+        });
+        this.add.existing(rps);
+
+        const directions: RadialInput<DirectionMove> = new RadialInput<DirectionMove>(this.game, [
+            new InputOption(DirectionMove.RIGHT, "directions", 0),
+            new InputOption(DirectionMove.UP, "directions", 1),
+            new InputOption(DirectionMove.LEFT, "directions", 2),
+            new InputOption(DirectionMove.DOWN, "directions", 3),
+        ]);
+        directions.width = this.game.width * 0.5;
+        directions.height = this.game.height * 0.5;
+        directions.scale.set(Math.min(directions.scale.x, directions.scale.y));
+        directions.centerX = this.game.width * 0.5;
+        directions.centerY = this.game.height * 0.5;
+        directions.visible = false;
+        directions.onMoveSelected.add((move: DirectionMove) => {
+            const p2Move: DirectionMove = this.game.rnd.pick([
+                DirectionMove.UP,
+                DirectionMove.DOWN,
+                DirectionMove.LEFT,
+                DirectionMove.RIGHT,
+            ]);
+            if (this.maxes.submitDirectionRound(move, p2Move)) {
+                this.addMoveToUi(move, p2Move);
+            }
+            directions.visible = false;
+            rpsSelector.visible = true;
+            directionSelector.visible = true;
         });
         this.add.existing(rps);
 
@@ -61,14 +92,39 @@ export class MaxesState extends Phaser.State {
         rpsSelector.inputEnabled = true;
         rpsSelector.events.onInputUp.add(() => {
             rpsSelector.visible = false;
+            directionSelector.visible = false;
             rps.visible = true;
         });
         this.add.existing(rpsSelector);
+
+        const directionSelector: Phaser.Image = new Phaser.Image(this.game, 0, 0, "direction-select");
+        directionSelector.width = this.game.width * 0.15;
+        directionSelector.height = this.game.height * 0.15;
+        directionSelector.scale.set(Math.min(directionSelector.scale.x, directionSelector.scale.y));
+        directionSelector.centerX = this.game.width * 0.7;
+        directionSelector.centerY = this.game.height * 0.5;
+        directionSelector.inputEnabled = true;
+        directionSelector.events.onInputUp.add(() => {
+            rpsSelector.visible = false;
+            directionSelector.visible = false;
+            directions.visible = true;
+        });
+        this.add.existing(directionSelector);
     }
 
-    private addMoveToUi(p1Move: RpsMove, p2Move: RpsMove): void {
+    private addMoveToUi(p1Move: RpsMove | DirectionMove, p2Move: RpsMove | DirectionMove): void {
         if (p1Move !== null) {
-            const newMove: Phaser.Image = new Phaser.Image(this.game, 0, 0, "rps", p1Move);
+            let asset: string = "";
+            switch (p1Move.type) {
+                case "RpsMove":
+                    asset = "rps";
+                    break;
+
+                case "DirectionMove":
+                    asset = "directions";
+                    break;
+            }
+            const newMove: Phaser.Image = new Phaser.Image(this.game, 0, 0, asset, p1Move.value);
             newMove.width = this.game.width * 0.05;
             newMove.scale.y = newMove.scale.x;
             newMove.left = this.p1Moves.width;
@@ -78,7 +134,17 @@ export class MaxesState extends Phaser.State {
         }
 
         if (p2Move !== null) {
-            const newMove: Phaser.Image = new Phaser.Image(this.game, 0, 0, "rps", p2Move);
+            let asset: string = "";
+            switch (p2Move.type) {
+                case "RpsMove":
+                    asset = "rps";
+                    break;
+
+                case "DirectionMove":
+                    asset = "directions";
+                    break;
+            }
+            const newMove: Phaser.Image = new Phaser.Image(this.game, 0, 0, asset, p2Move.value);
             newMove.width = this.game.width * 0.05;
             newMove.scale.y = newMove.scale.x;
             newMove.events.onOutOfBounds.add(newMove.destroy, newMove);
