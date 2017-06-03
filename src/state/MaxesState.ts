@@ -1,5 +1,6 @@
-import {MaxesGame, RpsMove} from "../MaxesGame";
-import {RpsInput} from "./RpsInput";
+import { MaxesGame, RpsMove } from "../MaxesGame";
+import { InputOption } from "./InputOption";
+import { RadialInput } from "./RadialInput";
 
 export class MaxesState extends Phaser.State {
 
@@ -28,9 +29,14 @@ export class MaxesState extends Phaser.State {
         this.p2Moves.top = this.game.height * 0.1;
         this.p2Moves.left = this.game.width * 0.55;
 
-        const rps: RpsInput = new RpsInput(this.game);
+        const rps: RadialInput<RpsMove> = new RadialInput<RpsMove>(this.game, [
+            new InputOption(RpsMove.ROCK, "rps", 0),
+            new InputOption(RpsMove.PAPER, "rps", 1),
+            new InputOption(RpsMove.SCISSORS, "rps", 2),
+        ]);
         rps.width = this.game.width * 0.5;
-        rps.scale.y = rps.scale.x;
+        rps.height = this.game.height * 0.5;
+        rps.scale.set(Math.min(rps.scale.x, rps.scale.y));
         rps.centerX = this.game.width * 0.5;
         rps.centerY = this.game.height * 0.5;
         rps.visible = false;
