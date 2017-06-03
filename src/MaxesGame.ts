@@ -1,22 +1,12 @@
+import {DirectionMove} from "./enums/DirectionMove";
+import {RpsMove} from "./enums/RpsMove";
+
 export enum MaxesGameState {
     RPS,
     DIRECTION_ADV_P1,
     DIRECTION_ADV_P2,
     WIN_P1,
     WIN_P2,
-}
-
-export enum RpsMove {
-    ROCK,
-    PAPER,
-    SCISSORS,
-}
-
-export enum DirectionMove {
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT,
 }
 
 export class MaxesGame {

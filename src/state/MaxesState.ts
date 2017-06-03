@@ -1,4 +1,6 @@
-import { MaxesGame, RpsMove } from "../MaxesGame";
+import { DirectionMove } from "../enums/DirectionMove";
+import { RpsMove } from "../enums/RpsMove";
+import { MaxesGame } from "../MaxesGame";
 import { InputOption } from "./InputOption";
 import { RadialInput } from "./RadialInput";
 
