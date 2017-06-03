@@ -54,8 +54,9 @@ export class MaxesState extends Phaser.State {
 
         const rpsSelector: Phaser.Image = new Phaser.Image(this.game, 0, 0, "rps-select");
         rpsSelector.width = this.game.width * 0.15;
-        rpsSelector.scale.y = rpsSelector.scale.x;
-        rpsSelector.centerX = this.game.width * 0.5;
+        rpsSelector.height = this.game.height * 0.15;
+        rpsSelector.scale.set(Math.min(rpsSelector.scale.x, rpsSelector.scale.y));
+        rpsSelector.centerX = this.game.width * 0.3;
         rpsSelector.centerY = this.game.height * 0.5;
         rpsSelector.inputEnabled = true;
         rpsSelector.events.onInputUp.add(() => {
