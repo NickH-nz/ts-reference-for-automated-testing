@@ -1,6 +1,6 @@
 import { DirectionMove } from "../enums/DirectionMove";
 import { RpsMove } from "../enums/RpsMove";
-import { MaxesGame } from "../MaxesGame";
+import { MaxesGame, MaxesGameState } from "../MaxesGame";
 import { InputOption } from "./InputOption";
 import { RadialInput } from "./RadialInput";
 
@@ -19,19 +19,12 @@ export class MaxesState extends Phaser.State {
     }
 
     public init(): void {
-        this.maxes = new MaxesGame();
-
         super.init();
     }
 
     public create(): void {
         this.p1Moves = this.add.group();
-        this.p1Moves.top = this.game.height * 0.1;
-        this.p1Moves.right = this.game.width * 0.45;
-
         this.p2Moves = this.add.group();
-        this.p2Moves.top = this.game.height * 0.1;
-        this.p2Moves.left = this.game.width * 0.55;
 
         const rps: RadialInput<RpsMove> = new RadialInput<RpsMove>(this.game, [
             new InputOption(RpsMove.ROCK, "rps", 0),
@@ -76,6 +69,14 @@ export class MaxesState extends Phaser.State {
             ]);
             if (this.maxes.submitDirectionRound(move, p2Move)) {
                 this.addMoveToUi(move, p2Move);
+
+                const state: MaxesGameState = this.maxes.getState();
+                if (state === MaxesGameState.WIN_P1
+                    || state === MaxesGameState.WIN_P2) {
+                    this.game.time.events.add(3000, () => {
+                        this.setupNewGame();
+                    });
+                }
             }
             directions.visible = false;
             rpsSelector.visible = true;
@@ -91,9 +92,11 @@ export class MaxesState extends Phaser.State {
         rpsSelector.centerY = this.game.height * 0.5;
         rpsSelector.inputEnabled = true;
         rpsSelector.events.onInputUp.add(() => {
-            rpsSelector.visible = false;
-            directionSelector.visible = false;
-            rps.visible = true;
+            if (this.isGameInProgress()) {
+                rpsSelector.visible = false;
+                directionSelector.visible = false;
+                rps.visible = true;
+            }
         });
         this.add.existing(rpsSelector);
 
@@ -105,11 +108,15 @@ export class MaxesState extends Phaser.State {
         directionSelector.centerY = this.game.height * 0.5;
         directionSelector.inputEnabled = true;
         directionSelector.events.onInputUp.add(() => {
-            rpsSelector.visible = false;
-            directionSelector.visible = false;
-            directions.visible = true;
+            if (this.isGameInProgress()) {
+                rpsSelector.visible = false;
+                directionSelector.visible = false;
+                directions.visible = true;
+            }
         });
         this.add.existing(directionSelector);
+
+        this.setupNewGame();
     }
 
     private addMoveToUi(p1Move: RpsMove | DirectionMove, p2Move: RpsMove | DirectionMove): void {
@@ -154,5 +161,23 @@ export class MaxesState extends Phaser.State {
             this.p2Moves.add(newMove);
             this.p2Moves.left = this.game.width * 0.55;
         }
+    }
+
+    private isGameInProgress(): boolean {
+        const state: MaxesGameState = this.maxes.getState();
+        return (state !== MaxesGameState.WIN_P1)
+            && (state !== MaxesGameState.WIN_P2);
+    }
+
+    private setupNewGame(): void {
+        this.p1Moves.removeAll(true);
+        this.p1Moves.top = this.game.height * 0.1;
+        this.p1Moves.right = this.game.width * 0.45;
+
+        this.p2Moves.removeAll(true);
+        this.p2Moves.top = this.game.height * 0.1;
+        this.p2Moves.left = this.game.width * 0.55;
+
+        this.maxes = new MaxesGame();
     }
 }
