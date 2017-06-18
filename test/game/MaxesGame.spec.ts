@@ -1,4 +1,3 @@
-import { assert } from "ceylon";
 import expect from "ceylon";
 
 import {DirectionMove} from "../../src/components/game/DirectionMove";
