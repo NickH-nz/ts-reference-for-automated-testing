@@ -1,4 +1,4 @@
-import {Enum} from "./Enum";
+import {Enum} from "../../Enum";
 
 export class DirectionMove extends Enum {
     public static readonly RIGHT: DirectionMove = new DirectionMove(0);

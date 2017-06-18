@@ -1,5 +1,5 @@
-import {DirectionMove} from "./enums/DirectionMove";
-import {RpsMove} from "./enums/RpsMove";
+import {DirectionMove} from "./DirectionMove";
+import {RpsMove} from "./RpsMove";
 
 export enum MaxesGameState {
     RPS,

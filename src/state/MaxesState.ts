@@ -1,8 +1,8 @@
-import { DirectionMove } from "../enums/DirectionMove";
-import { RpsMove } from "../enums/RpsMove";
-import { MaxesGame, MaxesGameState } from "../MaxesGame";
-import { InputOption } from "./InputOption";
-import { RadialInput } from "./RadialInput";
+import { DirectionMove } from "../components/game/DirectionMove";
+import { InputOption } from "../components/game/InputOption";
+import { MaxesGame, MaxesGameState } from "../components/game/MaxesGame";
+import { RadialInput } from "../components/game/RadialInput";
+import { RpsMove } from "../components/game/RpsMove";
 
 export class MaxesState extends Phaser.State {
 

@@ -1,9 +1,9 @@
 import { assert } from "ceylon";
 import expect from "ceylon";
 
-import {DirectionMove} from "../src/enums/DirectionMove";
-import {RpsMove} from "../src/enums/RpsMove";
-import {MaxesGame, MaxesGameState} from "../src/MaxesGame";
+import {DirectionMove} from "../../src/components/game/DirectionMove";
+import {MaxesGame, MaxesGameState} from "../../src/components/game/MaxesGame";
+import {RpsMove} from "../../src/components/game/RpsMove";
 
 describe("MaxesGame", () => {
     let game: MaxesGame;
