@@ -11,6 +11,8 @@ export class MaxesState extends Phaser.State {
     private p1Moves: Phaser.Group;
     private p2Moves: Phaser.Group;
 
+    private endGameMessage: Phaser.Text;
+
     public preload(): void {
         this.load.spritesheet("rps", "assets/rps.png", 289, 275);
         this.load.image("rps-select", "assets/rps-combined.png");
@@ -73,6 +75,9 @@ export class MaxesState extends Phaser.State {
                 const state: MaxesGameState = this.maxes.getState();
                 if (state === MaxesGameState.WIN_P1
                     || state === MaxesGameState.WIN_P2) {
+                    const message: string = state === MaxesGameState.WIN_P1 ? "YOU WON!" : "YOU LOST!";
+                    this.showEndGameMessage(message);
+
                     this.game.time.events.add(3000, () => {
                         this.setupNewGame();
                     });
@@ -115,6 +120,12 @@ export class MaxesState extends Phaser.State {
             }
         });
         this.add.existing(directionSelector);
+
+        this.endGameMessage = new Phaser.Text(this.game, 0, 0, "", {
+            fill: "white",
+            fontSize: 20,
+        });
+        this.add.existing(this.endGameMessage);
 
         this.setupNewGame();
     }
@@ -163,6 +174,13 @@ export class MaxesState extends Phaser.State {
         }
     }
 
+    private showEndGameMessage(message: string): void {
+        this.endGameMessage.text = message;
+        this.endGameMessage.centerX = this.game.width * 0.5;
+        this.endGameMessage.centerY = this.game.height * 0.5;
+        this.endGameMessage.visible = true;
+    }
+
     private isGameInProgress(): boolean {
         const state: MaxesGameState = this.maxes.getState();
         return (state !== MaxesGameState.WIN_P1)
@@ -177,6 +195,8 @@ export class MaxesState extends Phaser.State {
         this.p2Moves.removeAll(true);
         this.p2Moves.top = this.game.height * 0.1;
         this.p2Moves.left = this.game.width * 0.55;
+
+        this.endGameMessage.visible = false;
 
         this.maxes = new MaxesGame();
     }
