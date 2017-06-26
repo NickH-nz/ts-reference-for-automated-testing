@@ -30,12 +30,12 @@ describe("ExperienceTracker", () => {
 
         describe("Preset experience amount", () => {
             it("Starts with the given experience amount.", () => {
-                tracker.addExperience(100);
+                tracker = new ExperienceTracker(100);
                 expect(tracker.getState().currentExperience).toBe(100);
             });
 
             it("Starts on the correct level.", () => {
-                tracker.addExperience(ExperienceTracker.levelData[0]);
+                tracker = new ExperienceTracker(ExperienceTracker.levelData[0]);
                 expect(tracker.getState().currentLevel).toBe(2);
             });
         });
