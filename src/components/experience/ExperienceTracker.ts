@@ -7,32 +7,41 @@ export class ExperienceTracker {
 
     private level: number;
     private experience: number;
+    private previousExpCap: number;
+    private currentExpCap: number;
 
     constructor(startingExperience: number = 0) {
         this.experience = startingExperience;
-        this.level = this.getLevelFromExperience(this.experience);
+        this.update(this.experience);
     }
 
     public getState(): IExperienceState {
         return {
-            experienceForNextLevel: 0,
+            experienceForNextLevel: this.currentExpCap,
             currentExperience: this.experience,
-            startingExperience: 0,
+            startingExperience: this.previousExpCap,
             currentLevel: this.level,
         };
     }
 
     public addExperience(amount: number): void {
         this.experience = this.experience + Math.max(0, amount);
-        this.level = this.getLevelFromExperience(this.experience);
+        this.update(this.experience);
     }
 
-    private getLevelFromExperience(experience: number): number {
+    private update(experience: number): void {
         for (let i = (this.level - 1) || 0; i < ExperienceTracker.levelData.length; i++) {
             if (ExperienceTracker.levelData[i] > this.experience) {
-                return i + 1;
+                this.level = i + 1;
+                this.previousExpCap = ExperienceTracker.levelData[this.level - 2] || 0;
+                this.currentExpCap = ExperienceTracker.levelData[this.level - 1];
+                return;
             }
         }
-        return ExperienceTracker.levelData.length + 1;
+
+        this.level = ExperienceTracker.levelData.length + 1;
+        this.previousExpCap = ExperienceTracker.levelData[ExperienceTracker.levelData.length - 2];
+        this.currentExpCap = this.previousExpCap;
+        return;
     }
 }

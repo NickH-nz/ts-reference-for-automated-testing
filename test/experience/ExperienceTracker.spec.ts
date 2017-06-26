@@ -18,6 +18,14 @@ describe("ExperienceTracker", () => {
             it("Starts on level 1.", () => {
                 expect(tracker.getState().currentLevel).toBe(1);
             });
+
+            it("Previous experience limit starts at 0.", () => {
+                expect(tracker.getState().startingExperience).toBe(0);
+            });
+
+            it("Next experience limit starts at the correct place.", () => {
+                expect(tracker.getState().experienceForNextLevel).toBe(ExperienceTracker.levelData[0]);
+            });
         });
 
         describe("Preset experience amount", () => {
@@ -52,6 +60,16 @@ describe("ExperienceTracker", () => {
         it("Adding negative experience has no effect.", () => {
             tracker.addExperience(-100);
             expect(tracker.getState().currentExperience).toBe(0);
+        });
+
+        it("Previous experience limit is at the correct amount.", () => {
+            tracker.addExperience(ExperienceTracker.levelData[0]);
+            expect(tracker.getState().startingExperience).toBe(ExperienceTracker.levelData[0]);
+        });
+
+        it("Next experience limit is at the correct place.", () => {
+            tracker.addExperience(ExperienceTracker.levelData[0]);
+            expect(tracker.getState().experienceForNextLevel).toBe(ExperienceTracker.levelData[1]);
         });
     });
 
