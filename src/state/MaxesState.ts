@@ -1,3 +1,5 @@
+import { ExperienceBar } from "../components/experience/ExperienceBar";
+import { ExperienceTracker } from "../components/experience/ExperienceTracker";
 import { DirectionMove } from "../components/game/DirectionMove";
 import { InputOption } from "../components/game/InputOption";
 import { MaxesGame, MaxesGameState } from "../components/game/MaxesGame";
@@ -6,11 +8,15 @@ import { RpsMove } from "../components/game/RpsMove";
 
 export class MaxesState extends Phaser.State {
 
+    private static readonly EXP_CORRECT_MOVE: number = 2;
+    private static readonly EXP_WIN: number = 20;
+
     private maxes: MaxesGame;
 
     private p1Moves: Phaser.Group;
     private p2Moves: Phaser.Group;
 
+    private expBar: ExperienceBar;
     private endGameMessage: Phaser.Text;
 
     public preload(): void {
@@ -18,6 +24,8 @@ export class MaxesState extends Phaser.State {
         this.load.image("rps-select", "assets/rps-combined.png");
         this.load.spritesheet("directions", "assets/directions.png", 275, 275);
         this.load.image("direction-select", "assets/directions-combined.png");
+        this.load.image("exp-bar-backing", "assets/exp-bar-backing.png");
+        this.load.image("exp-bar-front", "assets/exp-bar-front.png");
     }
 
     public init(): void {
@@ -39,10 +47,12 @@ export class MaxesState extends Phaser.State {
         rps.centerX = this.game.width * 0.5;
         rps.centerY = this.game.height * 0.5;
         rps.visible = false;
-        rps.onMoveSelected.add((move: RpsMove) => {
+        rps.onMoveSelected.add(async (move: RpsMove) => {
             const p2Move: RpsMove = this.game.rnd.pick([RpsMove.ROCK, RpsMove.PAPER, RpsMove.SCISSORS]);
             if (this.maxes.submitRpsRound(move, p2Move)) {
                 this.addMoveToUi(move, p2Move);
+                rps.visible = false;
+                await this.expBar.addExperience(MaxesState.EXP_CORRECT_MOVE);
             }
             rps.visible = false;
             rpsSelector.visible = true;
@@ -62,7 +72,7 @@ export class MaxesState extends Phaser.State {
         directions.centerX = this.game.width * 0.5;
         directions.centerY = this.game.height * 0.5;
         directions.visible = false;
-        directions.onMoveSelected.add((move: DirectionMove) => {
+        directions.onMoveSelected.add(async (move: DirectionMove) => {
             const p2Move: DirectionMove = this.game.rnd.pick([
                 DirectionMove.UP,
                 DirectionMove.DOWN,
@@ -71,16 +81,22 @@ export class MaxesState extends Phaser.State {
             ]);
             if (this.maxes.submitDirectionRound(move, p2Move)) {
                 this.addMoveToUi(move, p2Move);
+                directions.visible = false;
 
                 const state: MaxesGameState = this.maxes.getState();
                 if (state === MaxesGameState.WIN_P1
                     || state === MaxesGameState.WIN_P2) {
+                    await this.expBar.addExperience(MaxesState.EXP_WIN);
                     const message: string = state === MaxesGameState.WIN_P1 ? "YOU WON!" : "YOU LOST!";
                     this.showEndGameMessage(message);
 
                     this.game.time.events.add(3000, () => {
                         this.setupNewGame();
                     });
+                }
+
+                if (state === MaxesGameState.WIN_P1) {
+                    await this.expBar.addExperience(MaxesState.EXP_CORRECT_MOVE);
                 }
             }
             directions.visible = false;
@@ -120,6 +136,13 @@ export class MaxesState extends Phaser.State {
             }
         });
         this.add.existing(directionSelector);
+
+        const padding: number = this.game.width * 0.01;
+        this.expBar = new ExperienceBar(this.game, padding, padding, new ExperienceTracker());
+        this.expBar.width = this.game.width * 0.5;
+        this.expBar.height = this.game.height * 0.1;
+        this.expBar.scale.set(Math.min(this.expBar.scale.x, this.expBar.scale.y));
+        this.add.existing(this.expBar);
 
         this.endGameMessage = new Phaser.Text(this.game, 0, 0, "", {
             fill: "white",
