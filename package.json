@@ -24,7 +24,7 @@
     "@types/mocha": "^2.2.41",
     "ceylon": "^0.9.1",
     "mocha": "^3.4.2",
-    "phaser-ce": "^2.8.0",
+    "phaser": "^2.6.2",
     "rimraf": "^2.6.1",
     "tslint": "^5.4.3",
     "typescript": "^2.4.0"
