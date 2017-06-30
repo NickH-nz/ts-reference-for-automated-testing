@@ -52,7 +52,6 @@ export class MaxesState extends Phaser.State {
             if (this.maxes.submitRpsRound(move, p2Move)) {
                 this.addMoveToUi(move, p2Move);
                 rps.visible = false;
-                await this.expBar.addExperience(MaxesState.EXP_CORRECT_MOVE);
             }
             rps.visible = false;
             rpsSelector.visible = true;
@@ -86,7 +85,6 @@ export class MaxesState extends Phaser.State {
                 const state: MaxesGameState = this.maxes.getState();
                 if (state === MaxesGameState.WIN_P1
                     || state === MaxesGameState.WIN_P2) {
-                    await this.expBar.addExperience(MaxesState.EXP_WIN);
                     const message: string = state === MaxesGameState.WIN_P1 ? "YOU WON!" : "YOU LOST!";
                     this.showEndGameMessage(message);
 
@@ -96,7 +94,7 @@ export class MaxesState extends Phaser.State {
                 }
 
                 if (state === MaxesGameState.WIN_P1) {
-                    await this.expBar.addExperience(MaxesState.EXP_CORRECT_MOVE);
+                    await this.expBar.addExperience(MaxesState.EXP_WIN);
                 }
             }
             directions.visible = false;
