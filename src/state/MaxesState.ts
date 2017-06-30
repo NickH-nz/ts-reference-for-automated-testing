@@ -45,7 +45,7 @@ export class MaxesState extends Phaser.State {
         rps.height = this.game.height * 0.5;
         rps.scale.set(Math.min(rps.scale.x, rps.scale.y));
         rps.centerX = this.game.width * 0.5;
-        rps.centerY = this.game.height * 0.5;
+        rps.centerY = this.game.height * 0.6;
         rps.visible = false;
         rps.onMoveSelected.add(async (move: RpsMove) => {
             const p2Move: RpsMove = this.game.rnd.pick([RpsMove.ROCK, RpsMove.PAPER, RpsMove.SCISSORS]);
@@ -70,7 +70,7 @@ export class MaxesState extends Phaser.State {
         directions.height = this.game.height * 0.5;
         directions.scale.set(Math.min(directions.scale.x, directions.scale.y));
         directions.centerX = this.game.width * 0.5;
-        directions.centerY = this.game.height * 0.5;
+        directions.centerY = this.game.height * 0.6;
         directions.visible = false;
         directions.onMoveSelected.add(async (move: DirectionMove) => {
             const p2Move: DirectionMove = this.game.rnd.pick([
@@ -106,11 +106,11 @@ export class MaxesState extends Phaser.State {
         this.add.existing(rps);
 
         const rpsSelector: Phaser.Image = new Phaser.Image(this.game, 0, 0, "rps-select");
-        rpsSelector.width = this.game.width * 0.15;
-        rpsSelector.height = this.game.height * 0.15;
+        rpsSelector.width = this.game.width * 0.25;
+        rpsSelector.height = this.game.height * 0.8 * 0.5;
         rpsSelector.scale.set(Math.min(rpsSelector.scale.x, rpsSelector.scale.y));
         rpsSelector.centerX = this.game.width * 0.3;
-        rpsSelector.centerY = this.game.height * 0.5;
+        rpsSelector.centerY = this.game.height * 0.6;
         rpsSelector.inputEnabled = true;
         rpsSelector.events.onInputUp.add(() => {
             if (this.isGameInProgress()) {
@@ -122,11 +122,11 @@ export class MaxesState extends Phaser.State {
         this.add.existing(rpsSelector);
 
         const directionSelector: Phaser.Image = new Phaser.Image(this.game, 0, 0, "direction-select");
-        directionSelector.width = this.game.width * 0.15;
-        directionSelector.height = this.game.height * 0.15;
+        directionSelector.width = this.game.width * 0.25;
+        directionSelector.height = this.game.height * 0.8 * 0.5;
         directionSelector.scale.set(Math.min(directionSelector.scale.x, directionSelector.scale.y));
         directionSelector.centerX = this.game.width * 0.7;
-        directionSelector.centerY = this.game.height * 0.5;
+        directionSelector.centerY = this.game.height * 0.6;
         directionSelector.inputEnabled = true;
         directionSelector.events.onInputUp.add(() => {
             if (this.isGameInProgress()) {
@@ -200,7 +200,7 @@ export class MaxesState extends Phaser.State {
     private showEndGameMessage(message: string): void {
         this.endGameMessage.text = message;
         this.endGameMessage.centerX = this.game.width * 0.5;
-        this.endGameMessage.centerY = this.game.height * 0.5;
+        this.endGameMessage.centerY = this.game.height * 0.6;
         this.endGameMessage.visible = true;
     }
 

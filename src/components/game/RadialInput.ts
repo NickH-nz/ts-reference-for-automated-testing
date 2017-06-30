@@ -22,6 +22,10 @@ export class RadialInput<T> extends Phaser.Group {
 
         options.forEach((optionData: InputOption<T>, i: number) => {
             const icon: Phaser.Image = new Phaser.Image(game, 0, 0, optionData.imageTag, optionData.frame);
+            icon.width = this.width * 0.35;
+            icon.height = this.height * 0.35;
+            icon.scale.set(Math.min(icon.scale.x, icon.scale.y));
+
             const theta: number = (Math.PI * 2) * (i + 1) / options.length;
             icon.centerX = radius * Math.sin(theta);
             icon.centerY = radius * Math.cos(theta);
