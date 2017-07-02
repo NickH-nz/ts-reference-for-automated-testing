@@ -24,9 +24,8 @@ export class MaxesState extends Phaser.State {
     private boundaryExp: Phaser.Rectangle;
 
     public preload(): void {
-        this.load.spritesheet("rps", "assets/rps.png", 289, 275);
+        this.load.spritesheet("moves", "assets/moves.png", 275, 275);
         this.load.image("rps-select", "assets/rps-combined.png");
-        this.load.spritesheet("directions", "assets/directions.png", 275, 275);
         this.load.image("direction-select", "assets/directions-combined.png");
         this.load.image("exp-bar-backing", "assets/exp-bar-backing.png");
         this.load.image("exp-bar-front", "assets/exp-bar-front.png");
@@ -52,9 +51,9 @@ export class MaxesState extends Phaser.State {
         this.p2Moves = this.add.group();
 
         const rps: RadialInput<RpsMove> = new RadialInput<RpsMove>(this.game, [
-            new InputOption(RpsMove.ROCK, "rps", 0),
-            new InputOption(RpsMove.PAPER, "rps", 1),
-            new InputOption(RpsMove.SCISSORS, "rps", 2),
+            new InputOption(RpsMove.ROCK, "moves", 4),
+            new InputOption(RpsMove.PAPER, "moves", 5),
+            new InputOption(RpsMove.SCISSORS, "moves", 6),
         ]);
         rps.width = this.boundaryInput.width * 0.6;
         rps.height = this.boundaryInput.height * 0.8;
@@ -75,10 +74,10 @@ export class MaxesState extends Phaser.State {
         this.add.existing(rps);
 
         const directions: RadialInput<DirectionMove> = new RadialInput<DirectionMove>(this.game, [
-            new InputOption(DirectionMove.RIGHT, "directions", 0),
-            new InputOption(DirectionMove.UP, "directions", 1),
-            new InputOption(DirectionMove.LEFT, "directions", 2),
-            new InputOption(DirectionMove.DOWN, "directions", 3),
+            new InputOption(DirectionMove.RIGHT, "moves", 0),
+            new InputOption(DirectionMove.UP, "moves", 1),
+            new InputOption(DirectionMove.LEFT, "moves", 2),
+            new InputOption(DirectionMove.DOWN, "moves", 3),
         ]);
         directions.width = this.boundaryInput.width * 0.6;
         directions.height = this.boundaryInput.height * 0.8;
@@ -188,17 +187,11 @@ export class MaxesState extends Phaser.State {
 
     private addMoveToUi(p1Move: RpsMove | DirectionMove, p2Move: RpsMove | DirectionMove): void {
         if (p1Move !== null) {
-            let asset: string = "";
-            switch (p1Move.type) {
-                case "RpsMove":
-                    asset = "rps";
-                    break;
-
-                case "DirectionMove":
-                    asset = "directions";
-                    break;
+            const offset: number = 0;
+            if (p1Move.type === "RpsMove") {
+                offset = 4;
             }
-            const newMove: Phaser.Image = new Phaser.Image(this.game, 0, 0, asset, p1Move.value);
+            const newMove: Phaser.Image = new Phaser.Image(this.game, 0, 0, "moves", p1Move + offset);
             newMove.height = this.boundaryHistory.height * 0.6;
             newMove.scale.x = newMove.scale.y;
             newMove.left = this.p1Moves.width;
@@ -209,17 +202,11 @@ export class MaxesState extends Phaser.State {
         }
 
         if (p2Move !== null) {
-            let asset: string = "";
-            switch (p2Move.type) {
-                case "RpsMove":
-                    asset = "rps";
-                    break;
-
-                case "DirectionMove":
-                    asset = "directions";
-                    break;
+            const offset: number = 0;
+            if (p2Move.type === "RpsMove") {
+                offset = 4;
             }
-            const newMove: Phaser.Image = new Phaser.Image(this.game, 0, 0, asset, p2Move.value);
+            const newMove: Phaser.Image = new Phaser.Image(this.game, 0, 0, "moves", p2Move + offset);
             newMove.height = this.boundaryHistory.height * 0.6;
             newMove.scale.x = newMove.scale.y;
             newMove.events.onOutOfBounds.add(newMove.destroy, newMove);
