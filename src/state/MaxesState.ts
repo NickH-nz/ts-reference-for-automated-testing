@@ -5,6 +5,7 @@ import { InputOption } from "../components/game/InputOption";
 import { MaxesGame, MaxesGameState } from "../components/game/MaxesGame";
 import { RadialInput } from "../components/game/RadialInput";
 import { RpsMove } from "../components/game/RpsMove";
+import { Promisify } from "../util/Promisify";
 
 export class MaxesState extends Phaser.State {
 
@@ -102,9 +103,9 @@ export class MaxesState extends Phaser.State {
                     const message: string = state === MaxesGameState.WIN_P1 ? "YOU WON!" : "YOU LOST!";
                     this.showEndGameMessage(message);
 
-                    this.game.time.events.add(3000, () => {
-                        this.setupNewGame();
-                    });
+                    await Promisify.time(this.game, 3000);
+
+                    this.setupNewGame();
                 }
 
                 if (state === MaxesGameState.WIN_P1) {
